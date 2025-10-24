@@ -30,12 +30,12 @@ def build_knowledge_graph(entities_path="outputs/entities.json",
         else:
             G.nodes[name].update(attrs)
 
-    # 1️⃣ Add all entities
+    # Add all entities
     for fname, doc in entities_data.items():
         for ent in doc["entities"]:
             add_node(ent["text"], ntype=ent["label"])
 
-    # 2️⃣ Add all relations
+    # Add all relations
     for fname, doc in relations_data.items():
         for rel in doc["relations"]:
             subj = rel["subject"]
@@ -56,7 +56,7 @@ def build_knowledge_graph(entities_path="outputs/entities.json",
 
             G.add_edge(subj, obj, label=pred)
 
-    # 3️⃣ Add personality traits as node attributes
+    # Add personality traits as node attributes
     for fname, doc_traits in traits_data.items():
         for person, pdata in doc_traits.items():
             if not G.has_node(person):
@@ -72,7 +72,7 @@ def build_knowledge_graph(entities_path="outputs/entities.json",
                     add_node(tword, ntype="TRAIT")
                 G.add_edge(person, tword, label="has_trait")
 
-    # 4️⃣ Export graph
+    # Export graph
     ensure_dir(output_dir)
     gexf_path = os.path.join(output_dir, "knowledge_graph.gexf")
     graphml_path = os.path.join(output_dir, "knowledge_graph.graphml")
@@ -80,8 +80,8 @@ def build_knowledge_graph(entities_path="outputs/entities.json",
     nx.write_gexf(G, gexf_path)
     nx.write_graphml(G, graphml_path)
 
-    print(f"✅ Knowledge Graph built with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges.")
-    print(f"📦 Exported to: {gexf_path}, {graphml_path}")
+    print(f"Knowledge Graph built with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges.")
+    print(f"Exported to: {gexf_path}, {graphml_path}")
 
     return G
 
@@ -150,7 +150,14 @@ def visualize_graph(
 
     # --- Add edges ---
     for u, v, data in G.edges(data=True):
-        net.add_edge(u, v, label=data.get("label", ""), color="#888", width=6)
+        net.add_edge(
+            u,
+            v,
+            label=data.get("label", ""),
+            color="#888",
+            width=6,
+            font={"size": 40, "strokeWidth": 3, "strokeColor": "#ffffff"}  # 👈 increase font size here
+        )
 
     ensure_dir(os.path.dirname(output_html))
     net.write_html(output_html, open_browser=False)
@@ -194,7 +201,7 @@ def visualize_graph(
     with open(output_html, "a") as f:
         f.write(highlight_js)
 
-    print(f"✅ Graph visualization saved to: {output_html}")
+    print(f"Graph visualization saved to: {output_html}")
 
 
 
