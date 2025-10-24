@@ -46,24 +46,24 @@ Install the spaCy transformer model (required for NER and sentence segmentation)
 pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.7.3/en_core_web_trf-3.7.3-py3-none-any.whl
 ```
 
-## Execution
+# Execution
 You can run the entire pipeline from start to finish with a single command:
 ```bash
 python main.py
 ```
 This will automatically:
 
-Generate synthetic text data and ground truth (data/synthetic_texts/).
+- Generate synthetic text data and ground truth (data/synthetic_texts/).
 
-Run preprocessing and entity extraction using spaCy.
+- Run preprocessing and entity extraction using spaCy.
 
-Extract relations using the LLM and apply schema-based filtering.
+- Extract relations using the LLM and apply schema-based filtering.
 
-Infer personality traits (Big Five + qualitative adjectives).
+- Infer personality traits (Big Five + qualitative adjectives).
 
-Construct and export the Knowledge Graph (.gexf, .graphml).
+- Construct and export the Knowledge Graph (.gexf, .graphml).
 
-Evaluate results and save metrics in outputs/evaluation_metrics.json.
+- Evaluate results and save metrics in outputs/evaluation_metrics.json.
 
 # Results
 ## Evaluation Summary
