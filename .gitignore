@@ -205,3 +205,21 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# Synthetic and labeled data
+data/synthetic_texts/
+data/ground_truth/
+
+# Outputs and logs
+outputs/
+logs/
+
+# Visualizations and generated artifacts
+*.graphml
+*.png
+*.html
+
+# API keys or config files
+openai_api_key.txt
+config.json
