@@ -144,6 +144,46 @@ def _id(prefix: str, n: int) -> str:
 # Core generation
 # -----------------------
 
+def _random_big_five() -> Dict[str, float]:
+    """Generate mildly correlated random Big Five scores."""
+    def r(): return round(random.uniform(0.2, 0.9), 2)
+    return {
+        "openness": r(),
+        "conscientiousness": r(),
+        "extraversion": r(),
+        "agreeableness": r(),
+        "neuroticism": r()
+    }
+
+def _traits_from_bigfive(b5: Dict[str, float]) -> List[str]:
+    """Derive 2–3 descriptive adjectives based on dominant Big Five scores."""
+    traits = []
+
+    # Define associations between Big Five and trait words
+    mapping = {
+        "openness": [("curious", 0.7), ("inventive", 0.8), ("reflective", 0.6)],
+        "conscientiousness": [("organized", 0.7), ("meticulous", 0.8), ("pragmatic", 0.6)],
+        "extraversion": [("outspoken", 0.7), ("energetic", 0.8), ("sociable", 0.6)],
+        "agreeableness": [("empathetic", 0.7), ("diplomatic", 0.8), ("cooperative", 0.6)],
+        "neuroticism": [("resilient", 0.3), ("anxious", 0.8)]  # low N = resilient
+    }
+
+    # Choose adjectives based on thresholds
+    for trait, candidates in mapping.items():
+        val = b5[trait]
+        for word, threshold in candidates:
+            if (trait == "neuroticism" and val <= threshold and word == "resilient") or (
+                trait != "neuroticism" and val >= threshold
+            ):
+                traits.append(word)
+                break  # only take one per dimension
+
+    # Ensure at least 2–3 adjectives
+    if len(traits) < 2:
+        traits += random.sample(["curious", "organized", "empathetic", "resilient"], 2)
+    return traits[:3]
+
+
 def _make_roster(n_people: int) -> Tuple[List[Person], Dict[str, Entity]]:
     """
     Create people + supporting entities (orgs/unis/locs).
@@ -185,7 +225,8 @@ def _make_roster(n_people: int) -> Tuple[List[Person], Dict[str, Entity]]:
         location_id = random.choice(loc_ids)
 
         big_five = _random_big_five()
-        t1, t2 = _pick_two_distinct(QUALITATIVE_TRAITS)
+        traits = _traits_from_bigfive(big_five)
+
 
         pid = _id("p", i)
         person = Person(
@@ -197,7 +238,7 @@ def _make_roster(n_people: int) -> Tuple[List[Person], Dict[str, Entity]]:
             location_id=location_id,
             gender=gender,
             big_five=big_five,
-            traits=[t1, t2]
+            traits=traits
         )
         people.append(person)
 
@@ -242,7 +283,7 @@ def _person_doc(person: Person, entities: Dict[str, Entity]) -> Tuple[str, List[
     university = entities[person.university_id].name
     location = entities[person.location_id].name
     pronoun, pronoun_cap = _pronouns(person.gender)
-    trait1, trait2 = person.traits
+    trait1, trait2 = person.traits[:2]
     role = person.role
     activity = random.choice(TEAM_ACTIVITIES)
 
