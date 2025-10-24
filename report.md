@@ -28,16 +28,17 @@ The system should identify entities (people, organizations, locations), extract 
 
 - Designing reproducible evaluation metrics for structured and unstructured attributes.
 
-# 3. System Architecture
-```mermaid
-graph TD
-A[Text Input (.txt)] --> B[Preprocessing (spaCy)]
-B --> C[Entity Extraction]
-C --> D[Relation Extraction (LLM + Filtering)]
-D --> E[Personality Inference (LLM)]
-E --> F[Knowledge Graph Construction (NetworkX)]
-F --> G[Evaluation (Precision, Recall, F1, MAE, Jaccard)]
-```
+# 3. System Architecture 
+
+The system pipeline processes the text data through the following sequence of components:
+
+1.  **Text Input (`.txt`)** → **Preprocessing (spaCy)**
+2.  **Preprocessing (spaCy)** → **Entity Extraction**
+3.  **Entity Extraction** → **Relation Extraction (LLM + Filtering)**
+4.  **Relation Extraction** → **Personality Inference (LLM)**
+5.  **Personality Inference** → **Knowledge Graph Construction (NetworkX)**
+6.  **Knowledge Graph Construction** → **Evaluation (Precision, Recall, F1, MAE, Jaccard)**
+
 
 
 Each step outputs intermediate artifacts (entities.json, relations.json, traits.json, and .gexf files) for transparency and testing.
@@ -208,13 +209,15 @@ Personality inference accuracy improved numerically but remains lexically varied
 
 # 11. Analysis of Improvements
 
+## 4. Analysis of Improvements
+
 | Change | Affected Metric | Impact | Reasoning |
 | :--- | :--- | :--- | :--- |
-| Personality–text alignment in data generation | MAE ↓ | Improves LLM’s ability to infer Big Five from contextual cues | |
-| Stricter predicate schema | Precision ↑ | Removes invalid or vague relations | |
-| Relation filtering | Precision ↑ | Ensures type-correct, valid triples | |
-| Calibrated LLM personality prompt | MAE ↓ | Standardizes numeric scaling and lexical output | |
-| Controlled vocabulary for traits | Jaccard stable | Reduces unpredictable adjective generation | |
+| Personality–text alignment in data generation | MAE ↓ | Improves LLM’s ability to infer Big Five from contextual cues | **The data now provides consistent, explicit cues for personality** |
+| Stricter predicate schema | Precision ↑ | Removes invalid or vague relations | **Enforces strict entity-type constraints (e.g., Person works\_for Organization)** |
+| Relation filtering | Precision ↑ | Ensures type-correct, valid triples | **Post-processing validation removes relations that do not match the expected schema** |
+| Calibrated LLM personality prompt | MAE ↓ | Standardizes numeric scaling and lexical output | **Provides the LLM with a clear structure and scale for its output** |
+| Controlled vocabulary for traits | Jaccard stable | Reduces unpredictable adjective generation | **Limits the LLM to a predefined set of qualitative adjectives** |
 
 # 12. Limitations
 
