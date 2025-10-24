@@ -15,28 +15,44 @@ def infer_personality_from_text(person_name: str, text: str, model: str = "gpt-4
     based on all sentences mentioning or describing them.
     """
     prompt = f"""
-    You are a personality analysis assistant. 
-    Given the following biographical text about a person, infer their personality traits 
-    according to the Big Five model (Openness, Conscientiousness, Extraversion, 
-    Agreeableness, and Neuroticism).
+    You are a personality analysis assistant.
 
-    Output valid JSON only in this format:
+    Given a short biography text, estimate the person's Big Five personality traits 
+    and list 2–3 descriptive adjectives that best represent those traits.
+
+    ### Big Five traits:
+    - openness
+    - conscientiousness
+    - extraversion
+    - agreeableness
+    - neuroticism
+
+    ### Rules:
+    - Assign a numeric score between 0.0 and 1.0 for each trait.
+    Use this guideline:
+    0.2 = low, 0.5 = average, 0.8 = high.
+    - Select adjectives only from the approved vocabulary below.
+    If none fit perfectly, choose the closest match — do NOT invent new words.
+
+    Approved trait vocabulary:
+    [curious, inventive, reflective, organized, meticulous, pragmatic, outspoken, energetic, sociable, empathetic, diplomatic, cooperative, resilient, anxious]
+
+    ### Output format (JSON only):
     {{
-      "big_five": {{
-        "openness": <float between 0 and 1>,
-        "conscientiousness": <float between 0 and 1>,
-        "extraversion": <float between 0 and 1>,
-        "agreeableness": <float between 0 and 1>,
-        "neuroticism": <float between 0 and 1>
-      }},
-      "traits": ["<adjective1>", "<adjective2>", ...]
+    "big_five": {{
+        "openness": ...,
+        "conscientiousness": ...,
+        "extraversion": ...,
+        "agreeableness": ...,
+        "neuroticism": ...
+    }},
+    "traits": ["...", "..."]
     }}
 
-    Person: {person_name}
-
-    Biography text:
+    Text:
     \"\"\"{text}\"\"\"
     """
+
 
     response = client.chat.completions.create(
         model=model,
@@ -69,7 +85,7 @@ def infer_personalities_for_doc(doc_data: dict, model: str = "gpt-4o-mini") -> d
 
     # If multiple PERSONs appear, analyze each independently
     for person in persons:
-        print(f"🧠 Inferring traits for {person}...")
+        print(f"Inferring traits for {person}...")
         traits = infer_personality_from_text(person, text, model)
         if traits:
             results[person] = traits
@@ -85,11 +101,11 @@ def infer_all_personalities(input_path="outputs/entities.json",
     all_results = {}
 
     for fname, doc_data in docs.items():
-        print(f"🔍 Inferring personalities in {fname} ...")
+        print(f"Inferring personalities in {fname} ...")
         all_results[fname] = infer_personalities_for_doc(doc_data, model)
 
     save_json(all_results, output_path)
-    print(f"\n✅ Personality traits saved to {output_path}")
+    print(f"\n Personality traits saved to {output_path}")
     return all_results
 
 

@@ -136,7 +136,6 @@ def evaluate_all(ground_truth_path="data/synthetic_texts/ground_truth.json",
     results.update(evaluate_personality(gt, traits_pred))
 
     save_json(results, output_path)
-    print("✅ Evaluation complete.")
     print(json.dumps(results, indent=2))
     return results
 
