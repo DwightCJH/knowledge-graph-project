@@ -79,9 +79,9 @@ You can click on nodes to explore entities, relationships, and personality trait
 | Component | Precision | Recall | F1 / MAE / Jaccard |
 | :--- | :--- | :--- | :--- |
 | **Entity Extraction** | 1.00 | 1.00 | 1.00 |
-| **Relation Extraction** | 0.83 | 0.77 | 0.80 |
+| **Relation Extraction** | 1.00 | 0.77 | 0.87 |
 | **Personality Inference (MAE)** | — | — | 0.205 |
-| **Personality Traits (Jaccard)** | — | — | 0.63 |
+| **Personality Traits (Jaccard)** | — | — | 0.60 |
 
 ## Key Findings
 
