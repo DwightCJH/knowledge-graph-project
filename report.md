@@ -251,3 +251,5 @@ OpenAI API, LLM-Based Inference.
 NetworkX, Graph Analysis Library.
 
 scikit-learn, Metric Computation Utilities.
+
+My chat with ChatGPT: https://chatgpt.com/share/68fbd560-69b0-800d-b211-e7ed05b41b02
