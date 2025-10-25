@@ -65,6 +65,15 @@ This will automatically:
 
 - Evaluate results and save metrics in outputs/evaluation_metrics.json.
 
+## View the Knowledge Graph
+
+After running `main.py`, an interactive graph is generated at:
+
+- outputs/graphs/knowledge_graph.html
+
+Open it in your browser — preferably using Live Server or any local web server — to ensure all interactive features work.
+You can click on nodes to explore entities, relationships, and personality traits within the graph.
+
 # Results
 ## Evaluation Summary
 | Component | Precision | Recall | F1 / MAE / Jaccard |
